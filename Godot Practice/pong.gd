@@ -16,7 +16,7 @@ const PAD_SPEED = 150
 
 func _ready():
 	screen_size = get_viewport_rect().size
-	pad_size = Vector2(8,32)
+	pad_size = get_node("Player1").get_texture().get_size()
 	set_process(true)
 
 func _process(delta):
@@ -24,24 +24,24 @@ func _process(delta):
 	var Player1_rect = Rect2( get_node("Player1").get_pos() - pad_size/2, pad_size )
 	var Player2_rect = Rect2( get_node("Player2").get_pos() - pad_size/2, pad_size )
 	Ball_pos+=direction*Ball_speed*delta
-	if ( (Ball_pos.y<-(screen_size.y/2) and direction.y <0) or (Ball_pos.y>screen_size.y/2 and direction.y>0)):
+	if ( (Ball_pos.y<0 and direction.y <0) or (Ball_pos.y>screen_size.y and direction.y>0)):
 		direction.y = -direction.y
 	if ( (Player1_rect.has_point(Ball_pos) and direction.x < 0) or (Player2_rect.has_point(Ball_pos) and direction.x > 0)):
 		direction.x=-direction.x
 		Ball_speed*=1.1
 		direction.y=randf()*2.0-1
 		direction = direction.normalized()
-	if (Ball_pos.x<-(screen_size.x/2) or Ball_pos.x>screen_size.x/2):
-		Ball_pos= Vector2(0,0) #Ball goes to screen center
+	if (Ball_pos.x<0 or Ball_pos.x>screen_size.x):
+		Ball_pos= screen_size*0.5 #Ball goes to screen center
 		Ball_speed=80
 		direction=Vector2(-1,0)
 	get_node("Ball").set_pos(Ball_pos)
 	#move Player1 pad
 	var Player1_pos = get_node("Player1").get_pos()
 
-	if (Player1_pos.y > -(screen_size.y/2) and Input.is_action_pressed("player1_move_up")):
+	if (Player1_pos.y > 0 and Input.is_action_pressed("player1_move_up")):
 		Player1_pos.y+=-PAD_SPEED*delta
-	if (Player1_pos.y < screen_size.y/2 and Input.is_action_pressed("player1_move_down")):
+	if (Player1_pos.y < screen_size.y and Input.is_action_pressed("player1_move_down")):
 		Player1_pos.y+=PAD_SPEED*delta
 
 	get_node("Player1").set_pos(Player1_pos)
@@ -49,9 +49,9 @@ func _process(delta):
 	#move Player2 pad
 	var Player2_pos = get_node("Player2").get_pos()
 
-	if (Player2_pos.y > -(screen_size.y/2) and Input.is_action_pressed("player2_move_up")):
+	if (Player2_pos.y > 0 and Input.is_action_pressed("player2_move_up")):
 		Player2_pos.y+=-PAD_SPEED*delta
-	if (Player2_pos.y < screen_size.y/2 and Input.is_action_pressed("player2_move_down")):
+	if (Player2_pos.y < screen_size.y and Input.is_action_pressed("player2_move_down")):
 		Player2_pos.y+=PAD_SPEED*delta
 
 	get_node("Player2").set_pos(Player2_pos)
