@@ -7,4 +7,6 @@ func _ready():
 func _on_snek_death():
 	get_node("Label").set_text("YOU DIED")
 	get_node("Bullet/PathFollow2D/Area2D/Bullet").stop()
-	get_node("testmovingfood/PathFollow2D/Area2D/Food").stop()
+	var food = get_node("testmovingfood/PathFollow2D/Area2D/Food")
+	if food != null:
+		food.stop()
