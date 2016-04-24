@@ -1,7 +1,8 @@
 
 extends Sprite
 
-var speed = 70
+var speed = 220
+
 var path
 
 func _ready():
