@@ -1,21 +1,25 @@
-extends RigidBody2D
+extends Polygon2D
 
 # member variables here, example:
 # var a=2
 # var b="textvar"
 
 func _ready():
-	set_process(true)
 	pass
 
-func _process(delta):
-	var mpos = get_viewport().get_mouse_pos()
-	var pos  = self.get_pos()
-	var dv   = mpos - pos
-	if (dv.length() > 1024):
-		dv = 1024 * dv.normalized()
+func moveTo(pos):
+	var sPos = self.get_pos()
+	var dv   = pos - sPos
+	if (dv.length() > 8):
+		dv = 8 * dv.normalized()
 	
-	if (dv.dot(self.get_linear_velocity()) < 0):
-		dv = 1024 * dv.normalized()
+	self.set_pos(sPos + dv)
+
+func closeGap(pos, dist):
+	var sPos = self.get_pos()
+	var dp   = pos - sPos
+	var len  = dp.length()
+	var vect = dp / len
+	var dv   = vect * (len - dist)
 	
-	self.set_applied_force(dv)
+	self.set_pos(sPos + dv)
