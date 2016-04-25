@@ -24,6 +24,10 @@ func _ready():
 	path = get_parent().get_parent()
 	set_fixed_process(true)
 
+func get_eaten():
+	get_node("../AnimationPlayer").play("eaten")
+	queue_free()
+
 func _on_Area2D_body_enter(body):
-	if body.has_method("enemy_hit2"):
-		body.enemy_hit2(self)
+	if body.has_method("enemy_hit"):
+		body.enemy_hit(self)

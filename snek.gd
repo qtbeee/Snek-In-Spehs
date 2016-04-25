@@ -7,7 +7,15 @@ var health
 var level
 var tummy
 var color_names = ["black", "red", "orange", "yellow", "green", "blue", "indigo", "violet", "white"]
-var colors = {"black":Color(0,0,0), "red":Color(1,0,0), "orange":Color(1,0.5,0), "yellow":Color(1,1,0), "green":Color(0,1,0), "blue":Color(0,0,1), "indigo":Color(0.5,0,1), "violet":Color(1,0,1), "white":Color(2,2,2)}
+var colors = {"black":Color(0,0,0), 
+				"red":Color(1,0,0), 
+				"orange":Color(1,0.5,0), 
+				"yellow":Color(1,1,0), 
+				"green":Color(0,1,0), 
+				"blue":Color(0,0,1), 
+				"indigo":Color(0.5,0,1), 
+				"violet":Color(1,0,1), 
+				"white":Color(2,2,2)}
 
 const HEALTH_MAX = 5
 const MAX_LEVEL = 9
@@ -46,21 +54,11 @@ func hit():
 		return
 	get_child(health).hide()
 
-func enemy_hit2(enemy_node):
+func enemy_hit(enemy_node):
 	var enemy_lvl = enemy_node.get_level()
 	if enemy_node.get_level() < level:
-		enemy_node.queue_free()
+		enemy_node.get_eaten()
 		tummy += enemy_lvl
-		if tummy >= TUMMY_FULL:
-			tummy -= TUMMY_FULL
-			restore_health()
-	else:
-		hit()
-
-func enemy_hit(enemy_level):
-	if enemy_level < level:
-		emit_signal("eat")
-		tummy += enemy_level
 		if tummy >= TUMMY_FULL:
 			tummy -= TUMMY_FULL
 			restore_health()
