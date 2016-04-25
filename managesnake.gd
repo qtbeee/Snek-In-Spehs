@@ -4,10 +4,13 @@ extends Node2D
 # var a=2
 # var b="textvar"
 var head
+var camera
 
 func _ready():
 	head = self.get_child(0)
-	for i in range(3):
+	camera = self.get_node("Head/Camera2D")
+	
+	for i in range(8):
 		add_snake_segment()
 		pass
 		
@@ -15,13 +18,13 @@ func _ready():
 	pass
 
 func _process(delta):
-	var mpos = get_viewport().get_mouse_pos()
+	var mpos = get_global_mouse_pos()
 	head.moveTo(mpos)
 	
 	var last = head
 	for i in range(1, self.get_child_count()):
 		var next = self.get_child(i)
-		next.closeGap(last.get_pos(), 32)
+		next.closeGap(last.get_pos(), 16)
 		last = next
 		pass
 
