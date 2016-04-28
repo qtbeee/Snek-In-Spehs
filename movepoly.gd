@@ -1,4 +1,4 @@
-extends Polygon2D
+extends Sprite
 
 # member variables here, example:
 # var a=2
@@ -14,6 +14,7 @@ func moveTo(pos):
 		dv = 8 * dv.normalized()
 	
 	self.set_pos(sPos + dv)
+	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
 func closeGap(pos, dist):
 	var sPos = self.get_pos()
@@ -23,3 +24,4 @@ func closeGap(pos, dist):
 	var dv   = vect * (len - dist)
 	
 	self.set_pos(sPos + dv)
+	self.set_rot(-dv.angle_to(Vector2(1, 0)))
