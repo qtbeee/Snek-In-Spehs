@@ -24,14 +24,14 @@ var colors = {"black":Color(0,0,0),
 const HEALTH_MAX = 5
 const MAX_LEVEL = 9
 const TUMMY_FULL = 1
-const nonsnakenodes = 3
+const nonsnakenodes = 1
 
 func _ready():
 	health = HEALTH_MAX
 	level = 1
 	tummy = 0
-	set_shape(0, get_node("CollisionShape2D").get_shape())
-	head = get_node("Head")
+	#set_shape(0, get_node("CollisionShape2D").get_shape())
+	head = get_node("Ugh")
 	camera = get_node("Camera")
 	nextZ = -2
 	
@@ -46,7 +46,7 @@ func _process(delta):
 	camera.set_pos(head.get_pos())
 	
 	var last = head
-	for i in range(4, get_child_count()):
+	for i in range(2, get_child_count()):
 		var next = get_child(i)
 		next.closeGap(last.get_pos(), 34)
 		last = next
@@ -66,7 +66,7 @@ func reset_health():
 	health = HEALTH_MAX
 
 func restore_health():
-	if health != MAX_LEVEL:
+	if health != HEALTH_MAX:
 		get_child(health+nonsnakenodes).show()
 		health += 1
 
@@ -80,10 +80,12 @@ func level_up():
 func hit():
 	health -= 1
 	if health == 0:
-		get_node("DeathDots").set_emitting(true)
+		get_node("Ugh/DeathDots").set_emitting(true)
 		emit_signal("death")
+		set_process(false)
 		return
 	get_child(health+nonsnakenodes).hide()
+
 
 func enemy_hit(enemy_node):
 	var enemy_lvl = enemy_node.get_level()
@@ -97,6 +99,7 @@ func enemy_hit(enemy_node):
 		hit()
 
 func change_color(color):
+	get_node("Ugh/Head").set_modulate(colors[color])
 	for child in get_children():
 		if child.has_method("set_modulate"):
 			child.set_modulate(colors[color])

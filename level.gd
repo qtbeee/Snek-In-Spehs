@@ -1,7 +1,12 @@
 
 extends Node2D
 
+#var camera
+var snake
+
 func _ready():
+	#camera = get_node("Camera")
+	snake = get_node("snek")
 	set_process(true)
 
 func _on_snek_death():
@@ -12,3 +17,6 @@ func _on_snek_death():
 	var food = get_node("testmovingfood/PathFollow2D/Area2D/Food")
 	if food != null:
 		food.stop()
+
+#func _process(delta):
+	#camera.set_pos(snake.get_pos())

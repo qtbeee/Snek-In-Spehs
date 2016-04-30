@@ -24,4 +24,4 @@ func _ready():
 func _on_Area2D_body_enter(body):
 	if body.has_method("hit"):
 		body.hit()
-		queue_free()
+		path.get_parent().queue_free()
