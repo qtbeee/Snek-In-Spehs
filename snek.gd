@@ -3,9 +3,13 @@ extends KinematicBody2D
 
 signal death
 signal eat
+
 var health
 var level
 var tummy
+var head
+var camera
+var nextZ
 var color_names = ["black", "red", "orange", "yellow", "green", "blue", "indigo", "violet", "white"]
 var colors = {"black":Color(0,0,0), 
 				"red":Color(1,0,0), 
@@ -20,14 +24,41 @@ var colors = {"black":Color(0,0,0),
 const HEALTH_MAX = 5
 const MAX_LEVEL = 9
 const TUMMY_FULL = 1
+const nonsnakenodes = 3
 
 func _ready():
 	health = HEALTH_MAX
 	level = 1
 	tummy = 0
 	set_shape(0, get_node("CollisionShape2D").get_shape())
+	head = get_node("Head")
+	camera = get_node("Camera")
+	nextZ = -2
+	
+	for i in range(3):
+		add_snake_segment()
 	change_color(color_names[level-1])
-	#set_fixed_process(true)
+	set_process(true)
+
+func _process(delta):
+	var mpos = get_global_mouse_pos()
+	head.moveTo(mpos)
+	camera.set_pos(head.get_pos())
+	
+	var last = head
+	for i in range(4, get_child_count()):
+		var next = get_child(i)
+		next.closeGap(last.get_pos(), 34)
+		last = next
+
+func add_snake_segment():
+	var lastSeg = get_child(get_child_count() - 1)
+	var nextSeg = lastSeg.duplicate()
+	
+	nextSeg.set_z(nextZ);
+	nextZ = nextZ - 1
+	
+	add_child(nextSeg)
 
 func reset_health():
 	for child in get_children():
@@ -36,7 +67,7 @@ func reset_health():
 
 func restore_health():
 	if health != MAX_LEVEL:
-		get_child(health).show()
+		get_child(health+nonsnakenodes).show()
 		health += 1
 
 func level_up():
@@ -52,11 +83,11 @@ func hit():
 		get_node("DeathDots").set_emitting(true)
 		emit_signal("death")
 		return
-	get_child(health).hide()
+	get_child(health+nonsnakenodes).hide()
 
 func enemy_hit(enemy_node):
 	var enemy_lvl = enemy_node.get_level()
-	if enemy_node.get_level() < level:
+	if enemy_lvl < level:
 		enemy_node.get_eaten()
 		tummy += enemy_lvl
 		if tummy >= TUMMY_FULL:

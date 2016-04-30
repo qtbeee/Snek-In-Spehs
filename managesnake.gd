@@ -14,10 +14,8 @@ func _ready():
 	
 	for i in range(5):
 		add_snake_segment()
-		pass
 	
 	set_process(true)
-	pass
 
 func _process(delta):
 	var mpos = get_global_mouse_pos()
@@ -29,7 +27,6 @@ func _process(delta):
 		var next = self.get_child(i)
 		next.closeGap(last.get_pos(), 34)
 		last = next
-		pass
 
 func add_snake_segment():
 	var lastSeg = self.get_child(self.get_child_count() - 1)
