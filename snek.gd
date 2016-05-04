@@ -40,7 +40,6 @@ func _ready():
 	change_color(color_names[level-1])
 	set_process(true)
 
-
 func _process(delta):
 	var mpos = get_global_mouse_pos()
 	head.moveTo(mpos)
