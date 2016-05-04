@@ -2,11 +2,13 @@
 extends Area2D
 
 var direction
-var speed
+var speed = 0
 var curpos
 
 func _ready():
 	curpos = Vector2(0, 0)
+
+func _enter_tree():
 	set_fixed_process(true)
 
 func set_speed(new_speed):
@@ -19,8 +21,9 @@ func stop():
 	set_speed(0)
 
 func _fixed_process(delta):
-	set_pos(curpos + (direction * speed))
-	pass
+	curpos = get_pos()
+	set_pos(curpos + (direction * speed * delta))
+	
 
 func _on_Bullet_body_enter( body ):
 	if body.has_method("hit"):

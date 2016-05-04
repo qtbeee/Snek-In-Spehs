@@ -3,14 +3,12 @@ extends Area2D
 
 #var path
 #var speed
-var bullet
 var timer
 var animations
 const LEVEL = 1
-const TIMER_MAX = 200
+const TIMER_MAX = 5
 
 func _ready():
-	bullet = preload("res://bullet.scn")
 	timer = TIMER_MAX
 	animations = get_node("AnimationPlayer")
 	set_fixed_process(true)
@@ -18,19 +16,29 @@ func _ready():
 func _fixed_process(delta):
 	if timer <= delta:
 		shoot()
-		timer = TIMER_MAX + (timer - delta)
+		timer = TIMER_MAX
 	else:
 		timer -= delta
 
 func shoot():
 	animations.play("shoot")
 
-func bullet_shoot():
-	var bul = bullet.instance()
-	bul.set_speed(10)
-	bul.set_direction(Vector2(0, 1))#im not sure anymoreeeee
-	add_child(bul)
-	
+func bullet_shoot(direction):
+	var bullet = preload("res://bullet.scn").instance()
+	add_child(bullet)
+	bullet.set_pos(Vector2(0,0))
+	bullet.set_direction(direction)
+	bullet.set_speed(150)
+
+func shoot_8():
+	bullet_shoot(Vector2(1,0))
+	bullet_shoot(Vector2(-1,0))
+	bullet_shoot(Vector2(0,1))
+	bullet_shoot(Vector2(0,-1))
+	bullet_shoot(Vector2(1,1))
+	bullet_shoot(Vector2(-1,1))
+	bullet_shoot(Vector2(1,-1))
+	bullet_shoot(Vector2(-1,-1))
 
 func stop():
 	set_process(false)
