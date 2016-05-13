@@ -4,12 +4,14 @@ extends KinematicBody2D
 signal death
 signal eat
 
+var b = 100
 var health
 var level
 var tummy
 var head
 var camera
 var nextZ
+var timer
 var color_names = ["black", "red", "orange", "yellow", "green", "blue", "indigo", "violet", "white"]
 var colors = {"black":Color(0,0,0), 
 				"red":Color(1,0,0), 
@@ -25,6 +27,7 @@ const HEALTH_MAX = 5
 const MAX_LEVEL = 9
 const TUMMY_FULL = 1
 const nonsnakenodes = 1
+const TIMER_MAX = 5
 
 func _ready():
 	health = HEALTH_MAX
@@ -40,6 +43,13 @@ func _ready():
 	change_color(color_names[level-1])
 	set_process(true)
 
+func _fixed_process(delta):
+	if timer <= delta:
+		shoot()
+		timer = TIMER_MAX
+	else:
+		timer -= delta
+
 func _process(delta):
 	var mpos = get_global_mouse_pos()
 	head.moveTo(mpos)
@@ -50,6 +60,18 @@ func _process(delta):
 		var next = get_child(i)
 		next.closeGap(last.get_pos(), 34)
 		last = next
+	
+	if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
+		#print(str("Mouse at location:",mpos));
+		head.boost(mpos);
+		
+		if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
+			b = b - 1
+			print(str("Boost count:", b));
+		
+		else:
+			b = b + 1
+
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
@@ -79,7 +101,7 @@ func level_up():
 
 func hit():
 	health -= 1
-	if health == 0:
+	if health <= 0:
 		get_node("Ugh/DeathDots").set_emitting(true)
 		emit_signal("death")
 		set_process(false)
