@@ -8,17 +8,28 @@ var maxSep
 var totalTime
 var liveTime
 
+var xPart
+var yPart
+
 func _ready():
 	rPos       = self.get_pos()
 	rVel       = Vector2(0, 4)
-	bullet     = self.get_node("Polygon2D")
+	bullet     = self.get_node("Sprite")
 	separation = 0
 	maxSep     = 64
 	totalTime  = 0
 	liveTime   = 5
 	remove_child(bullet)
-	addBullets(5)
 	set_process(true)
+
+func fire(dir, speed, num, sep):
+	rVel     = speed * dir.normalized()
+	maxSep   = sep
+	var norm = rVel.normalized()
+	var tang = Vector2(-norm.y, norm.x)
+	xPart = tang.dot(Vector2(1, 0))
+	yPart = norm.dot(Vector2(1, 0))
+	addBullets(num)
 
 func addBullets(num):
 	for i in range(num):
@@ -29,8 +40,10 @@ func _process(dt):
 	totalTime += dt
 	
 	rPos       += rVel
-	var xOffset = 16 * sin(14 * totalTime)
-	var newPos  = Vector2(rPos.x + xOffset, rPos.y)
+	var offset  = 24 * sin(10 * totalTime)
+	var xOff    = offset * xPart
+	var yOff    = offset * yPart
+	var newPos  = Vector2(rPos.x + xOff, rPos.y + yOff)
 	self.set_pos(newPos)
 	
 	if separation < maxSep:
@@ -43,7 +56,13 @@ func _process(dt):
 			else:
 				oSign = 1
 			
-			var pos = Vector2(oSign * ((i + 1) / 2) * separation, 0)
-			b.set_pos(pos)
+			offset = oSign * ((i + 1) / 2) * separation
+			xOff   = offset * xPart
+			yOff   = offset * yPart
+			b.set_pos(Vector2(xOff, yOff))
 	else:
 		pass
+
+func set_position(pos):
+	rPos = pos
+	self.set_pos(pos)

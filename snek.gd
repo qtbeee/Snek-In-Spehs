@@ -129,8 +129,6 @@ func computeAvgVelocity():
 	
 	avgVel += (_avgMult * vel)
 	
-	print(avgVel)
-	
 	_avgIndex += 1
 	if (_avgIndex >= _avgFrames):
 		_avgIndex = 0

@@ -9,6 +9,9 @@ func _ready():
 	snake = get_node("snek")
 	bulletGroups = []
 	
+	var bullet = get_node("Bullet")
+	remove_child(bullet)
+	
 	var ce = get_node("ChasingEnemy")
 	ce.setTarget(snake)
 	ce.setType("flank_switch")
