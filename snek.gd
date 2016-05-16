@@ -4,7 +4,7 @@ extends KinematicBody2D
 signal death
 signal eat
 
-var b = 100
+var b = 0
 var health
 var level
 var tummy
@@ -13,7 +13,8 @@ var camera
 var nextZ
 var timer
 var color_names = ["black", "red", "orange", "yellow", "green", "blue", "indigo", "violet", "white"]
-var colors = {"black":Color(0,0,0), 
+var colors = {
+				"black":Color(0,0,0), 
 				"red":Color(1,0,0), 
 				"orange":Color(1,0.5,0), 
 				"yellow":Color(1,1,0), 
@@ -61,17 +62,14 @@ func _process(delta):
 		next.closeGap(last.get_pos(), 34)
 		last = next
 	
-	if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
-		#print(str("Mouse at location:",mpos));
+	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
 		head.boost(mpos);
-		
-		if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
-			b = b - 1
-			print(str("Boost count:", b));
-		
-		else:
-			b = b + 1
-
+		b -= 3
+		print(str("Boost count:", b));
+	
+	elif(b < 200):
+		b += 1
+		print(str("Boost count:", b));
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
