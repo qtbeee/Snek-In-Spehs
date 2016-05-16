@@ -1,9 +1,10 @@
-
 extends KinematicBody2D
 
 signal death
 signal eat
 
+var pos
+var vel
 var health
 var level
 var tummy
@@ -21,12 +22,21 @@ var colors = {"black":Color(0,0,0),
 				"violet":Color(1,0,1), 
 				"white":Color(2,2,2)}
 
+# Averaged over the last 60 frames ~ 1 seconds
+var avgVel     = Vector2(0, 0)
+var _velArr    = []
+var _avgIndex  = 0
+var _avgFrames = 60
+var _avgMult   = 1.0 / _avgFrames
+
 const HEALTH_MAX = 5
 const MAX_LEVEL = 9
 const TUMMY_FULL = 1
 const nonsnakenodes = 1
 
 func _ready():
+	pos = Vector2(0, 0)
+	vel = Vector2(0, 0)
 	health = HEALTH_MAX
 	level = 1
 	tummy = 0
@@ -34,6 +44,7 @@ func _ready():
 	head = get_node("Ugh")
 	camera = get_node("Camera")
 	nextZ = -2
+
 	
 	for i in range(3):
 		add_snake_segment()
@@ -44,12 +55,16 @@ func _process(delta):
 	var mpos = get_global_mouse_pos()
 	head.moveTo(mpos)
 	camera.set_pos(head.get_pos())
+	pos = head.get_pos()
+	vel = head.velocity
 	
 	var last = head
 	for i in range(2, get_child_count()):
 		var next = get_child(i)
 		next.closeGap(last.get_pos(), 34)
 		last = next
+	
+	computeAvgVelocity()
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
@@ -103,3 +118,19 @@ func change_color(color):
 	for child in get_children():
 		if child.has_method("set_modulate"):
 			child.set_modulate(colors[color])
+
+func computeAvgVelocity():
+	if (_velArr.size() == _avgFrames):
+		var lastVel = _velArr[_avgIndex]
+		_velArr[_avgIndex] = vel
+		avgVel -= _avgMult * lastVel
+	else:
+		_velArr.append(vel)
+	
+	avgVel += (_avgMult * vel)
+	
+	print(avgVel)
+	
+	_avgIndex += 1
+	if (_avgIndex >= _avgFrames):
+		_avgIndex = 0
