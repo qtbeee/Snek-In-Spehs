@@ -94,7 +94,7 @@ func level_up():
 
 func hit():
 	health -= 1
-	if health == 0:
+	if health <= 0:
 		get_node("Ugh/DeathDots").set_emitting(true)
 		emit_signal("death")
 		set_process(false)
