@@ -46,14 +46,18 @@ func flankTarget(sw):
 	var rPos    = pos - offset
 	
 	if (sw):
-		var d1 = pos.distance_squared_to(lPos)
-		var d2 = pos.distance_squared_to(rPos)
+		var d1 = self.get_pos().distance_squared_to(lPos)
+		var d2 = self.get_pos().distance_squared_to(rPos)
 		
-		if (abs(d1 - d2) < 16):
+		var rl = d2 - d1
+		if (rl < -16 && side == "left"):
+			side = "right"
+		elif (rl > 16 && side == "right"):
 			side = "left"
+			
+		if (side == "left"):
 			moveToPos(lPos)
 		else:
-			side = "right"
 			moveToPos(rPos)
 	else:
 		if (side == "left"):
