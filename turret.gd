@@ -30,8 +30,8 @@ func _ready():
 
 func bullet_shoot(direction):
 	var bullet = preload("res://bullet.scn").instance()
-	add_child(bullet)
-	bullet.set_pos(Vector2(0,0))
+	get_parent().add_child(bullet)
+	bullet.set_pos(get_pos())
 	bullet.set_direction(direction)
 	bullet.set_speed(150)
 
