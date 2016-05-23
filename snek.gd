@@ -1,4 +1,3 @@
-#extends KinematicBody2D
 extends Node2D
 
 signal death
