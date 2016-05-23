@@ -1,4 +1,3 @@
-
 extends Area2D
 
 export(int, 1, 8) var level = 1

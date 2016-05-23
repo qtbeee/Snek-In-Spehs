@@ -5,14 +5,17 @@ signal eat
 
 var pos
 var vel
+var b = 0
 var health
 var level
 var tummy
 var head
 var camera
 var nextZ
+var timer
 var color_names = ["black", "red", "orange", "yellow", "green", "blue", "indigo", "violet", "white"]
-var colors = {"black":Color(0,0,0), 
+var colors = {
+				"black":Color(0,0,0), 
 				"red":Color(1,0,0), 
 				"orange":Color(1,0.5,0), 
 				"yellow":Color(1,1,0), 
@@ -33,10 +36,12 @@ const HEALTH_MAX = 5
 const MAX_LEVEL = 9
 const TUMMY_FULL = 1
 const nonsnakenodes = 1
+const TIMER_MAX = 5
 
 func _ready():
 	pos = Vector2(0, 0)
 	vel = Vector2(0, 0)
+
 	health = HEALTH_MAX
 	level = 1
 	tummy = 0
@@ -44,12 +49,18 @@ func _ready():
 	head = get_node("Ugh")
 	camera = get_node("Camera")
 	nextZ = -2
-
 	
 	for i in range(3):
 		add_snake_segment()
 	change_color(color_names[level-1])
 	set_process(true)
+
+func _fixed_process(delta):
+	if timer <= delta:
+		shoot()
+		timer = TIMER_MAX
+	else:
+		timer -= delta
 
 func _process(delta):
 	var mpos = get_global_mouse_pos()
@@ -65,6 +76,15 @@ func _process(delta):
 		last = next
 	
 	computeAvgVelocity()
+
+	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
+		head.boost(mpos);
+		b -= 3
+		print(str("Boost count:", b));
+	
+	elif(b < 200):
+		b += 1
+		print(str("Boost count:", b));
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)

@@ -15,6 +15,16 @@ func moveTo(pos):
 	self.set_pos(sPos + dv)
 	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
+func boost(pos):
+	#layers on top of move speed ( speed + boost )
+	var sPos = self.get_pos()
+	var dv   = pos - sPos
+	if (dv.length() > 4):
+		dv = 4 * dv.normalized()
+	
+	self.set_pos(sPos + dv)
+	self.set_rot(-dv.angle_to(Vector2(1, 0)))
+
 func rotHead(pos):
 	var sPos = self.get_pos()
 	var dv   = pos - sPos
