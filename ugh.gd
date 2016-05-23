@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+var velocity = Vector2(0, 0)
+
 func _ready():
 	pass
 
@@ -9,8 +11,8 @@ func moveTo(pos):
 	if (dv.length() > 8):
 		dv = 8 * dv.normalized()
 	
+	velocity = dv
 	self.move(dv)
-	print(self.is_colliding())
 	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
 func boost(pos):

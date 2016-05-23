@@ -1,4 +1,3 @@
-
 extends Area2D
 
 export(int, 1, 8) var level = 1
@@ -58,7 +57,7 @@ func shotgun_down():
 func shotgun_left():
 	bullet_shoot(Vector2(-1, 0.5))
 	bullet_shoot(Vector2(-1, 0))
-	bullet_shoot(Vector2(-1, -1))
+	bullet_shoot(Vector2(-1, -0.5))
 
 func shotgun_right():
 	bullet_shoot(Vector2(1, 0.5))
