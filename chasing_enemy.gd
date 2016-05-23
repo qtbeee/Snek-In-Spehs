@@ -1,9 +1,10 @@
 extends KinematicBody2D
 
-var target = null
-var type   = "flank_left"
-var side   = "left"
-var dist   = 100
+var target  = null
+var type    = "chase"
+var side    = "left"
+var dist    = 100
+var shooter = false
 
 var bTime  = 0
 var bDelay = 1.5
@@ -11,16 +12,18 @@ var bDelay = 1.5
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
+	type   = "chase"
 	set_process(true)
 
 func _process(delta):
 	if (target == null):
 		pass
 	
-	bTime += delta
-	if (bTime > bDelay):
-		bTime -= bDelay
-		shootAtTarget()
+	if (shooter):
+		bTime += delta
+		if (bTime > bDelay):
+			bTime -= bDelay
+			shootAtTarget()
 	
 	if (type == "chase"):
 		chaseTarget()
@@ -34,7 +37,7 @@ func _process(delta):
 		flankTarget(true)
 
 func chaseTarget():
-	moveToPos(target.get_pos())
+	moveToPos(target.pos)
 
 func flankTarget(sw):
 	var pos     = target.pos
@@ -71,7 +74,7 @@ func moveToPos(pos):
 	if (dv.length() > 6):
 		dv = 6 * dv.normalized()
 	
-	self.set_pos(sPos + dv)
+	self.move(dv)
 	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
 func shootAtTarget():
