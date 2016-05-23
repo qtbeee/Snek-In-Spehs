@@ -1,5 +1,5 @@
-
-extends KinematicBody2D
+#extends KinematicBody2D
+extends Node2D
 
 signal death
 signal eat
@@ -65,11 +65,11 @@ func _process(delta):
 	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
 		head.boost(mpos);
 		b -= 3
-		print(str("Boost count:", b));
+		#print(str("Boost count:", b));
 	
 	elif(b < 200):
 		b += 1
-		print(str("Boost count:", b));
+		#print(str("Boost count:", b));
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
