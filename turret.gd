@@ -29,10 +29,10 @@ func _ready():
 
 func bullet_shoot(direction):
 	var bullet = preload("res://bullet.scn").instance()
-	add_child(bullet)
-	bullet.set_pos(Vector2(0,0))
+	get_parent().add_child(bullet)
+	bullet.set_pos(get_pos())
 	bullet.set_direction(direction)
-	bullet.set_speed(150)
+	bullet.set_speed(200)
 
 func shoot_8():
 	bullet_shoot(Vector2(1,0))
@@ -43,6 +43,26 @@ func shoot_8():
 	bullet_shoot(Vector2(-1,1))
 	bullet_shoot(Vector2(1,-1))
 	bullet_shoot(Vector2(-1,-1))
+
+func shotgun_upright():
+	bullet_shoot(Vector2(1, -0.5))
+	bullet_shoot(Vector2(1, -1))
+	bullet_shoot(Vector2(0.5, -1))
+
+func shotgun_downright():
+	bullet_shoot(Vector2(1, 0.5))
+	bullet_shoot(Vector2(1, 1))
+	bullet_shoot(Vector2(0.5, 1))
+
+func shotgun_upleft():
+	bullet_shoot(Vector2(-1, -0.5))
+	bullet_shoot(Vector2(-1, -1))
+	bullet_shoot(Vector2(-0.5, -1))
+
+func shotgun_downleft():
+	bullet_shoot(Vector2(-1, 0.5))
+	bullet_shoot(Vector2(-1, 1))
+	bullet_shoot(Vector2(-0.5, 1))
 
 func shotgun_up():
 	bullet_shoot(Vector2(0, -1))
