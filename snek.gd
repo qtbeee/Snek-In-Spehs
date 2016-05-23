@@ -63,9 +63,12 @@ func _process(delta):
 		last = next
 	
 	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
-		head.boost(mpos);
-		b -= 3
-		print(str("Boost count:", b));
+		if(b < 2):
+			pass
+		else:
+			head.boost(mpos);
+			b -= 2
+			print(str("Boost count:", b));
 	
 	elif(b < 200):
 		b += 1
@@ -118,8 +121,21 @@ func enemy_hit(enemy_node):
 	else:
 		hit()
 
+func wall_hit(body):
+	var wall_lvl = 20
+	if wall_lvl > level:
+		hit()
+
 func change_color(color):
 	get_node("Ugh/Head").set_modulate(colors[color])
 	for child in get_children():
 		if child.has_method("set_modulate"):
 			child.set_modulate(colors[color])
+
+func _on_snake_body_enter(body):
+	if body.has_method("hit"):
+		get_node("Ugh/DeathDots").set_emitting(true)
+		emit_signal("death")
+		set_process(false)
+		return
+	get_child(health+nonsnakenodes).hide()
