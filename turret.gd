@@ -2,30 +2,12 @@ extends Area2D
 
 export(int, 1, 8) var level = 1
 
-#var path
-#var speed
-var timer
 var commonanimations
 var animations
-const LEVEL = 1
-const TIMER_MAX = 5
 
 func _ready():
-	timer = TIMER_MAX
 	commonanimations = get_node("CommonAnimations")
 	animations = get_node("SelfAnimation")
-#	set_fixed_process(true)
-
-#func _fixed_process(delta):
-#	if timer <= delta:
-#		shoot()
-#		timer = TIMER_MAX
-#	else:
-#		timer -= delta
-
-#func shoot():
-#	animations.play("shoot")
-	#animations. i dont know how to do thisssss
 
 func bullet_shoot(direction):
 	var bullet = preload("res://bullet.scn").instance()
@@ -86,9 +68,7 @@ func shotgun_right():
 
 func stop():
 	set_process(false)
-
-func get_level():
-	return LEVEL
+	animations.stop()
 
 func get_eaten():
 	commonanimations.play("eaten")
@@ -96,3 +76,6 @@ func get_eaten():
 func _on_Turret_body_enter(body):
 	if body.has_method("enemy_hit"):
 		body.enemy_hit(self)
+
+func _on_VisibilityEnabler2D_enter_screen():
+	animations.set_active(true)

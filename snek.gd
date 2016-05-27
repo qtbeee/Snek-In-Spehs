@@ -127,7 +127,7 @@ func hit():
 
 
 func enemy_hit(enemy_node):
-	var enemy_lvl = enemy_node.get_level()
+	var enemy_lvl = enemy_node.get("level")
 	if enemy_lvl < level:
 		enemy_node.get_eaten()
 		tummy += enemy_lvl
@@ -163,9 +163,10 @@ func computeAvgVelocity():
 		_avgIndex = 0
 
 func _on_snake_body_enter(body):
-	if body.has_method("hit"):
-		get_node("Ugh/DeathDots").set_emitting(true)
-		emit_signal("death")
-		set_process(false)
-		return
-	get_child(health+nonsnakenodes).hide()
+	#if body.has_method("hit"):
+	#	get_node("Ugh/DeathDots").set_emitting(true)
+	#	emit_signal("death")
+	#	set_process(false)
+	#	return
+	#get_child(health+nonsnakenodes).hide()
+	pass
