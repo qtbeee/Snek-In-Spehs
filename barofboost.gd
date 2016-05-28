@@ -1,7 +1,7 @@
 
 extends Panel
 
-onready var snek = get_parent().get_parent().get_node("snek")
+onready var snek = get_parent().get_parent().get_parent().get_node("Snek")
 var width = 200
 
 const SCALE = 2

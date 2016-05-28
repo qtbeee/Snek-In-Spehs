@@ -1,4 +1,3 @@
-
 extends Area2D
 
 var direction
@@ -29,3 +28,7 @@ func _on_Bullet_body_enter( body ):
 	if body.has_method("hit"):
 		body.hit()
 	queue_free()
+
+func _on_Area2D_body_enter(body):
+	if body.has_method("hit"):
+		body.hit()

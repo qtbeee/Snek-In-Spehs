@@ -1,9 +1,10 @@
-
-extends KinematicBody2D
+extends Node2D
 
 signal death
 signal eat
 
+var pos
+var vel
 var b = 0
 var health
 var level
@@ -24,6 +25,13 @@ var colors = {
 				"violet":Color(1,0,1), 
 				"white":Color(2,2,2)}
 
+# Averaged over the last 60 frames ~ 1 seconds
+var avgVel     = Vector2(0, 0)
+var _velArr    = []
+var _avgIndex  = 0
+var _avgFrames = 60
+var _avgMult   = 1.0 / _avgFrames
+
 const HEALTH_MAX = 5
 const MAX_LEVEL = 9
 const TUMMY_FULL = 1
@@ -31,6 +39,9 @@ const nonsnakenodes = 1
 const TIMER_MAX = 5
 
 func _ready():
+	pos = Vector2(0, 0)
+	vel = Vector2(0, 0)
+
 	health = HEALTH_MAX
 	level = 1
 	tummy = 0
@@ -55,6 +66,8 @@ func _process(delta):
 	var mpos = get_global_mouse_pos()
 	head.moveTo(mpos)
 	camera.set_pos(head.get_pos())
+	pos = head.get_pos()
+	vel = head.velocity
 	
 	var last = head
 	for i in range(2, get_child_count()):
@@ -62,7 +75,10 @@ func _process(delta):
 		next.closeGap(last.get_pos(), 34)
 		last = next
 	
+	computeAvgVelocity()
+
 	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
+		#print(str("Boost count:", b));
 		if(b < 2):
 			pass
 		else:
@@ -72,7 +88,7 @@ func _process(delta):
 	
 	elif(b < 200):
 		b += 1
-		print(str("Boost count:", b));
+		#print(str("Boost count:", b));
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
@@ -111,7 +127,7 @@ func hit():
 
 
 func enemy_hit(enemy_node):
-	var enemy_lvl = enemy_node.get_level()
+	var enemy_lvl = enemy_node.get("level")
 	if enemy_lvl < level:
 		enemy_node.get_eaten()
 		tummy += enemy_lvl
@@ -132,10 +148,25 @@ func change_color(color):
 		if child.has_method("set_modulate"):
 			child.set_modulate(colors[color])
 
+func computeAvgVelocity():
+	if (_velArr.size() == _avgFrames):
+		var lastVel = _velArr[_avgIndex]
+		_velArr[_avgIndex] = vel
+		avgVel -= _avgMult * lastVel
+	else:
+		_velArr.append(vel)
+	
+	avgVel += (_avgMult * vel)
+	
+	_avgIndex += 1
+	if (_avgIndex >= _avgFrames):
+		_avgIndex = 0
+
 func _on_snake_body_enter(body):
-	if body.has_method("hit"):
-		get_node("Ugh/DeathDots").set_emitting(true)
-		emit_signal("death")
-		set_process(false)
-		return
-	get_child(health+nonsnakenodes).hide()
+	#if body.has_method("hit"):
+	#	get_node("Ugh/DeathDots").set_emitting(true)
+	#	emit_signal("death")
+	#	set_process(false)
+	#	return
+	#get_child(health+nonsnakenodes).hide()
+	pass

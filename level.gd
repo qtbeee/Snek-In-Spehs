@@ -1,4 +1,3 @@
-
 extends Node2D
 
 #var camera
@@ -6,7 +5,13 @@ var snake
 
 func _ready():
 	#camera = get_node("Camera")
-	snake = get_node("snek")
+	snake = get_node("Snek")
+	
+	var bullet = get_node("Bullet")
+	remove_child(bullet)
+	
+	var ce = get_node("ChasingEnemy")
+	ce.setTarget(snake)
 	set_process(true)
 
 func _on_snek_death():

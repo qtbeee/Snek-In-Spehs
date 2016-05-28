@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+var velocity = Vector2(0, 0)
+
 func _ready():
 	pass
 
@@ -9,7 +11,8 @@ func moveTo(pos):
 	if (dv.length() > 8):
 		dv = 8 * dv.normalized()
 	
-	self.set_pos(sPos + dv)
+	velocity = dv
+	self.move(dv)
 	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
 func boost(pos):
@@ -19,7 +22,7 @@ func boost(pos):
 	if (dv.length() > 4):
 		dv = 4 * dv.normalized()
 	
-	self.set_pos(sPos + dv)
+	self.move(dv)
 	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
 func rotHead(pos):
@@ -38,7 +41,7 @@ func closeGap(pos, dist):
 	var vect = dp / len
 	var dv   = vect * (len - dist)
 	
-	self.set_pos(sPos + dv)
+	self.move(dv)
 	self.set_rot(-dv.angle_to(Vector2(1, 0)))
 
 func hit():
