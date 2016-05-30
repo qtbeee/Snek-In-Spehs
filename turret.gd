@@ -4,6 +4,7 @@ export(int, 1, 8) var level = 1
 
 var commonanimations
 var animations
+onready var mainnode = get_tree().get_root().get_child(0)
 
 func _ready():
 	commonanimations = get_node("CommonAnimations")
@@ -11,8 +12,8 @@ func _ready():
 
 func bullet_shoot(direction):
 	var bullet = preload("res://bullet.scn").instance()
-	get_parent().add_child(bullet)
-	bullet.set_pos(get_pos())
+	mainnode.add_child(bullet)
+	bullet.set_pos(get_global_pos())
 	bullet.set_direction(direction)
 	bullet.set_speed(200)
 
@@ -67,10 +68,10 @@ func shotgun_right():
 	bullet_shoot(Vector2(1, -0.5))
 
 func stop():
-	set_process(false)
 	animations.stop()
 
 func get_eaten():
+	stop()
 	commonanimations.play("eaten")
 
 func _on_Turret_body_enter(body):

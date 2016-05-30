@@ -1,10 +1,14 @@
 extends KinematicBody2D
 
-var target  = null
-var type    = "chase"
+onready var mainnode = get_tree().get_root().get_child(0)
+onready var target  = mainnode.get_node("Snek")
+export(String, "chase", "flank_left", "flank_right", "flank_switch") var type = "chase"
 var side    = "left"
 var dist    = 100
-var shooter = false
+export var shooter = false
+export(int, 1, 8) var level = 2
+
+onready var animations = get_node("AnimationPlayer")
 
 var bTime  = 0
 var bDelay = 1.5
@@ -12,12 +16,12 @@ var bDelay = 1.5
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
-	type   = "chase"
-	set_process(true)
+	#set_process(true)
+	pass
 
 func _process(delta):
 	if (target == null):
-		pass
+		return
 	
 	if (shooter):
 		bTime += delta
@@ -69,7 +73,7 @@ func flankTarget(sw):
 			moveToPos(rPos)
 
 func moveToPos(pos):
-	var sPos = self.get_pos()
+	var sPos = get_global_pos()
 	var dv   = pos - sPos
 	if (dv.length() > 6):
 		dv = 6 * dv.normalized()
@@ -79,10 +83,12 @@ func moveToPos(pos):
 
 func shootAtTarget():
 	var dir    = target.pos - self.get_pos()
-	var bullet = preload("res://BulletController.scn").instance()
-	get_parent().add_child(bullet)
-	bullet.set_position(self.get_pos())
-	bullet.fire(dir, 12, 3, 128)
+	var bullet = preload("res://bullet.scn").instance()
+	mainnode.add_child(bullet)
+	#bullet.add_collision_exception_with(self)
+	bullet.set_pos(get_global_pos())
+	bullet.set_direction(dir)
+	bullet.set_speed(200)
 
 func setTarget(tar):
 	target = tar
@@ -92,3 +98,14 @@ func setType(t):
 
 func setDist(d):
 	dist = d
+
+func _on_Area2D_body_enter( body ):
+	if body.has_method("enemy_hit"):
+		body.enemy_hit(self)
+
+func get_eaten():
+	animations.play("eaten")
+
+
+func _on_VisibilityEnabler2D_enter_screen():
+	set_process(true)
