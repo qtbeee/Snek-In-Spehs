@@ -1,6 +1,7 @@
 extends Area2D
 
 export(int, 1, 8) var level = 1
+export(String, "down", "downleft", "downleftspread", "downright", "downrightspread", "left", "leftspread", "right", "rightspread", "up", "upspread", "upleft", "upleftspread", "upright", "uprightspread", "upspread", "spreadshot") var firing_pattern = "down"
 
 var commonanimations
 var animations
@@ -9,6 +10,11 @@ onready var mainnode = get_tree().get_root().get_child(0)
 func _ready():
 	commonanimations = get_node("CommonAnimations")
 	animations = get_node("SelfAnimation")
+	var animname = str("res://shotgun_", firing_pattern, ".anm")
+	print(animname)
+	var anim = load(animname)
+	animations.add_animation(firing_pattern, anim)
+	animations.play(firing_pattern)
 
 func bullet_shoot(direction):
 	var bullet = preload("res://bullet.scn").instance()
