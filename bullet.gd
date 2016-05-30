@@ -27,8 +27,7 @@ func _fixed_process(delta):
 func _on_Bullet_body_enter( body ):
 	if body.has_method("hit"):
 		body.hit()
-	queue_free()
-
-func _on_Area2D_body_enter(body):
-	if body.has_method("hit"):
-		body.hit()
+	if body.has_method("shootAtTarget"):
+		return
+	else:
+		queue_free()
