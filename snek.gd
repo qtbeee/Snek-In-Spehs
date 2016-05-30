@@ -86,8 +86,8 @@ func _process(delta):
 			b -= 2
 			print(str("Boost count:", b));
 	
-	elif(b < 200):
-		b += 1
+	elif(b < 999):
+		b += 999
 		#print(str("Boost count:", b));
 
 func add_snake_segment():
