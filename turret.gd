@@ -115,23 +115,34 @@ func shotgun_leftspread():
 	bullet_shoot(Vector2(-1, 0.66))
 	bullet_shoot(Vector2(-1, -0.66))
 
-func crazy():
-	bullet_shoot(Vector2(1,0))
-	bullet_shoot(Vector2(-1,0))
-	bullet_shoot(Vector2(0,1))
-	bullet_shoot(Vector2(0,-1))
-	bullet_shoot(Vector2(1,1))
-	bullet_shoot(Vector2(-1,1))
-	bullet_shoot(Vector2(1,-1))
-	bullet_shoot(Vector2(-1,-1))
-	bullet_shoot(Vector2(-1,-0.5))
-	bullet_shoot(Vector2(-1,-0.5))
-	bullet_shoot(Vector2(-0.5,-1))
-	bullet_shoot(Vector2(0.5,-1))
-	bullet_shoot(Vector2(1,-0.5))
-	bullet_shoot(Vector2(1,-0.5))
-	bullet_shoot(Vector2(-0.5,1))
-	bullet_shoot(Vector2(0.5,1))
+func shotgun_rightspread():
+	bullet_shoot(Vector2(1, 0))
+	bullet_shoot(Vector2(1, 0.33))
+	bullet_shoot(Vector2(1, -0.33))
+	bullet_shoot(Vector2(1, 0.66))
+	bullet_shoot(Vector2(1, -0.66))
+
+func shotgun_crazy():
+	bullet_shoot(Vector2(0, -1))
+	bullet_shoot(Vector2(.5, -1))
+	bullet_shoot(Vector2(1, -1))
+	bullet_shoot(Vector2(1, -.5))
+	bullet_shoot(Vector2(1, 0))
+	bullet_shoot(Vector2(-1, 0))
+	bullet_shoot(Vector2(-1, -.5))
+	bullet_shoot(Vector2(-1, -1))
+	bullet_shoot(Vector2(-.5, -1))
+	bullet_shoot(Vector2(0, 1))
+	bullet_shoot(Vector2(-.5, 1))
+	bullet_shoot(Vector2(-1, 1))
+	bullet_shoot(Vector2(-1, .5))
+	bullet_shoot(Vector2(-1, 0))
+	bullet_shoot(Vector2(1, 0))
+	bullet_shoot(Vector2(1, .5))
+	bullet_shoot(Vector2(1, 1))
+	bullet_shoot(Vector2(.5, 1))
+
+
 
 func stop():
 	animations.stop()

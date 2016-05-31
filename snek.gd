@@ -2,6 +2,7 @@ extends Node2D
 
 signal death
 signal eat
+signal levelup
 
 var pos
 var vel
@@ -78,17 +79,15 @@ func _process(delta):
 	computeAvgVelocity()
 
 	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
-		#print(str("Boost count:", b));
 		if(b < 2):
 			pass
 		else:
 			head.boost(mpos);
 			b -= 2
-			print(str("Boost count:", b));
 	
 	elif(b < 999):
 		b += 999
-		#print(str("Boost count:", b));
+
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
@@ -111,6 +110,7 @@ func restore_health():
 
 func level_up():
 	reset_health()
+	emit_signal("levelup")
 	level += 1
 	if level > MAX_LEVEL:
 		level = MAX_LEVEL
@@ -131,6 +131,7 @@ func enemy_hit(enemy_node):
 	if enemy_lvl < level:
 		enemy_node.get_eaten()
 		tummy += enemy_lvl
+		emit_signal("eat")
 		if tummy >= TUMMY_FULL:
 			tummy -= TUMMY_FULL
 			restore_health()
