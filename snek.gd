@@ -2,6 +2,8 @@ extends Node2D
 
 signal death
 signal eat
+signal levelup
+signal win
 
 var pos
 var vel
@@ -37,6 +39,8 @@ const MAX_LEVEL = 9
 const TUMMY_FULL = 1
 const nonsnakenodes = 1
 const TIMER_MAX = 5
+const MAX_BOOST = 200
+const RECHARGE_RATE = 2
 
 func _ready():
 	pos = Vector2(0, 0)
@@ -50,17 +54,13 @@ func _ready():
 	camera = get_node("Camera")
 	nextZ = -2
 	
+	#set up boost
+	b = MAX_BOOST
+	
 	for i in range(3):
 		add_snake_segment()
 	change_color(color_names[level-1])
 	set_process(true)
-
-func _fixed_process(delta):
-	if timer <= delta:
-		shoot()
-		timer = TIMER_MAX
-	else:
-		timer -= delta
 
 func _process(delta):
 	var mpos = get_global_mouse_pos()
@@ -78,17 +78,15 @@ func _process(delta):
 	computeAvgVelocity()
 
 	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
-		#print(str("Boost count:", b));
 		if(b < 2):
 			pass
 		else:
 			head.boost(mpos);
 			b -= 2
-			print(str("Boost count:", b));
 	
-	elif(b < 200):
-		b += 1
-		#print(str("Boost count:", b));
+	elif(b < MAX_BOOST):
+		b += RECHARGE_RATE
+
 
 func add_snake_segment():
 	var lastSeg = get_child(get_child_count() - 1)
@@ -111,9 +109,12 @@ func restore_health():
 
 func level_up():
 	reset_health()
+	emit_signal("levelup")
 	level += 1
-	if level > MAX_LEVEL:
+	if level >= MAX_LEVEL:
 		level = MAX_LEVEL
+		emit_signal("win")
+		set_process(false)
 	change_color(color_names[level-1])
 
 func hit():
@@ -127,10 +128,11 @@ func hit():
 
 
 func enemy_hit(enemy_node):
-	var enemy_lvl = enemy_node.get_level()
+	var enemy_lvl = enemy_node.get("level")
 	if enemy_lvl < level:
 		enemy_node.get_eaten()
 		tummy += enemy_lvl
+		emit_signal("eat")
 		if tummy >= TUMMY_FULL:
 			tummy -= TUMMY_FULL
 			restore_health()
@@ -161,11 +163,3 @@ func computeAvgVelocity():
 	_avgIndex += 1
 	if (_avgIndex >= _avgFrames):
 		_avgIndex = 0
-
-func _on_snake_body_enter(body):
-	if body.has_method("hit"):
-		get_node("Ugh/DeathDots").set_emitting(true)
-		emit_signal("death")
-		set_process(false)
-		return
-	get_child(health+nonsnakenodes).hide()

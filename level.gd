@@ -1,27 +1,14 @@
 extends Node2D
 
 #var camera
-var snake
+onready var snake = get_node("Snek")
+onready var deathmsg = get_node("HUD/Control/DeathMessage")
+onready var winstate = get_node("WinningStuff")
 
-func _ready():
-	#camera = get_node("Camera")
-	snake = get_node("Snek")
+func _on_Snek_death():
+	deathmsg.set_text("YOU DIED")
+
+func _on_Snek_win():
+	deathmsg.set_text("YOU WIN!")
+	winstate.get_node("Particles2D").set_emitting(true)
 	
-	var bullet = get_node("Bullet")
-	remove_child(bullet)
-	
-	var ce = get_node("ChasingEnemy")
-	ce.setTarget(snake)
-	set_process(true)
-
-func _on_snek_death():
-	get_node("Label").set_text("YOU DIED")
-	var bullet = get_node("Bullet/PathFollow2D/Area2D/Bullet")
-	if bullet != null:
-		bullet.stop()
-	var food = get_node("testmovingfood/PathFollow2D/Area2D/Food")
-	if food != null:
-		food.stop()
-
-#func _process(delta):
-	#camera.set_pos(snake.get_pos())
