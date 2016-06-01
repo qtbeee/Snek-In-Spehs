@@ -104,6 +104,7 @@ func _on_Area2D_body_enter( body ):
 		body.enemy_hit(self)
 
 func get_eaten():
+	add_collision_exception_with(target.get_child(1))
 	animations.play("eaten")
 
 
