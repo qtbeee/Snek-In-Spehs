@@ -3,6 +3,7 @@ extends Node2D
 signal death
 signal eat
 signal levelup
+signal win
 
 var pos
 var vel
@@ -38,6 +39,8 @@ const MAX_LEVEL = 9
 const TUMMY_FULL = 1
 const nonsnakenodes = 1
 const TIMER_MAX = 5
+const MAX_BOOST = 200
+const RECHARGE_RATE = 2
 
 func _ready():
 	pos = Vector2(0, 0)
@@ -51,17 +54,13 @@ func _ready():
 	camera = get_node("Camera")
 	nextZ = -2
 	
+	#set up boost
+	b = MAX_BOOST
+	
 	for i in range(3):
 		add_snake_segment()
 	change_color(color_names[level-1])
 	set_process(true)
-
-func _fixed_process(delta):
-	if timer <= delta:
-		shoot()
-		timer = TIMER_MAX
-	else:
-		timer -= delta
 
 func _process(delta):
 	var mpos = get_global_mouse_pos()
@@ -85,8 +84,8 @@ func _process(delta):
 			head.boost(mpos);
 			b -= 2
 	
-	elif(b < 999):
-		b += 999
+	elif(b < MAX_BOOST):
+		b += RECHARGE_RATE
 
 
 func add_snake_segment():
@@ -112,8 +111,10 @@ func level_up():
 	reset_health()
 	emit_signal("levelup")
 	level += 1
-	if level > MAX_LEVEL:
+	if level >= MAX_LEVEL:
 		level = MAX_LEVEL
+		emit_signal("win")
+		set_process(false)
 	change_color(color_names[level-1])
 
 func hit():
