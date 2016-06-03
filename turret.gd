@@ -8,10 +8,10 @@ var animations
 onready var mainnode = get_tree().get_root().get_child(0)
 
 func _ready():
+	get_node("Particles2D").set_emitting(false)
 	commonanimations = get_node("CommonAnimations")
 	animations = get_node("SelfAnimation")
 	var animname = str("res://shotgun_", firing_pattern, ".anm")
-	print(animname)
 	var anim = load(animname)
 	animations.add_animation(firing_pattern, anim)
 	animations.play(firing_pattern)
