@@ -154,6 +154,3 @@ func get_eaten():
 func _on_Turret_body_enter(body):
 	if body.has_method("enemy_hit"):
 		body.enemy_hit(self)
-
-func _on_VisibilityEnabler2D_enter_screen():
-	animations.set_active(true)
