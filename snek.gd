@@ -77,7 +77,7 @@ func _process(delta):
 	
 	computeAvgVelocity()
 
-	if(Input.is_mouse_button_pressed(BUTTON_LEFT) &&  b > 0 ):
+	if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
 		if(b < 2):
 			pass
 		else:
