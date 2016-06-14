@@ -17,10 +17,10 @@
 			<real_array  len="4"> 				1, 1, 1, 1 </real_array>
 			<string> "values" </string>
 			<array  len="4" shared="false">
-				<vector2> 1, 1 </vector2>
-				<vector2> 0.8, 0.8 </vector2>
-				<vector2> 1.2, 1.2 </vector2>
-				<vector2> 1, 1 </vector2>
+				<vector2> 0.3, 0.3 </vector2>
+				<vector2> 0.2, 0.2 </vector2>
+				<vector2> 0.4, 0.4 </vector2>
+				<vector2> 0.3, 0.3 </vector2>
 			</array>
 		</dictionary>
 		<string name="tracks/1/type"> "method" </string>
@@ -38,8 +38,26 @@
 					<array  len="0" shared="false">
 					</array>
 					<string> "method" </string>
-					<string> "shotgun_uprightspread" </string>
+					<string> "shotgun_down" </string>
 				</dictionary>
+			</array>
+		</dictionary>
+		<string name="tracks/2/type"> "value" </string>
+		<node_path name="tracks/2/path"> "Face:frame" </node_path>
+		<int name="tracks/2/interp"> 1 </int>
+		<dictionary name="tracks/2/keys" shared="false">
+			<string> "cont" </string>
+			<bool> True </bool>
+			<string> "times" </string>
+			<real_array  len="4"> 				0, 2, 2.5, 3 </real_array>
+			<string> "transitions" </string>
+			<real_array  len="4"> 				1, 1, 1, 1 </real_array>
+			<string> "values" </string>
+			<array  len="4" shared="false">
+				<int> 0 </int>
+				<int> 1 </int>
+				<int> 22 </int>
+				<int> 47 </int>
 			</array>
 		</dictionary>
 
