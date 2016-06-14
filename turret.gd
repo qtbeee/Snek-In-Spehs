@@ -23,7 +23,7 @@ func bullet_shoot(direction):
 	bullet.set_direction(direction)
 	bullet.set_speed(200)
 
-func shoot_8():
+func shotgun_spreadshot():
 	bullet_shoot(Vector2(1,0))
 	bullet_shoot(Vector2(-1,0))
 	bullet_shoot(Vector2(0,1))
